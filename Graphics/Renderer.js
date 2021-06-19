@@ -2,9 +2,12 @@ class Renderer
 {
     ClearScreen()
     {
-        this.canvas.Clear();
-        this.canvas.ReadImageData();
         this.canvas.ClearColor(this.clearColor);
+    }
+
+    FadeScreen()
+    {
+        this.canvas.Fade(0.95, this.clearColor);
     }
 
     constructor(canvas)
@@ -16,7 +19,8 @@ class Renderer
         this.onRenderHandlers = [];
         this.onRenderTextHandlers = [];
 
-        this.ClearScreen();
+        this.canvas.ReadImageData();
+        this.canvas.ClearColor(this.clearColor);
     }
 
     AddOnRenderHandler(handler)
@@ -39,7 +43,7 @@ class Renderer
 
     Update()
     {
-        this.ClearScreen();
+        this.FadeScreen();
 
         this.DispatchOnRenderHandlers(this.onRenderHandlers);
 

@@ -101,14 +101,18 @@ class Canvas
         this.pixels.copyWithin(0, this.width * 4);
     }
 
-    FadePixels(fade)
+    Fade(fade, fadeColor)
     {
         var width = this.width;
         var height = this.height;
 
+        var fadeColorData = fadeColor.Get();
+
         for (let i = 0; i < width * height * 4; i+=4)
         {
-            this.pixels[i+3] = this.pixels[i+3] - fade;
+            this.pixels[i] = Math.floor((this.pixels[i] * fade) + (fadeColorData[0] * (1.0 - fade)));
+            this.pixels[i+1] = Math.floor((this.pixels[i+1] * fade) + (fadeColorData[1] * (1.0 - fade)));
+            this.pixels[i+2] = Math.floor((this.pixels[i+2] * fade) + (fadeColorData[2] * (1.0 - fade)));
         }
     }
 

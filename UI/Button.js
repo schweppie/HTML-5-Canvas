@@ -4,7 +4,7 @@ class Button
     {
         this.x = x;
         this.y = y;
-        this.width = text.length * 15;
+        this.width = text.length * 18;
         this.height = 40;
         this.focusColor = new RGB(200,200,255);
         this.textColor = new RGB(0,0,0);
@@ -53,7 +53,7 @@ class Button
     OnRenderText(canvas)
     {
         var ctx = canvas.getRawContext();
-        ctx.font = "25px Arial";
+        ctx.font = "25px Consolas";
         ctx.fillText(this.text, this.x+15, this.y+30);
     }
 }
