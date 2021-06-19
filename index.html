@@ -1,0 +1,23 @@
+<html>
+<body>
+    <h1>Draw On Canvas</h1>
+    <canvas id="mainCanvas" width="900" height="450">
+    </canvas>
+
+    <script type="text/javascript" src="Graphics/RGB.js"></script>
+    <script type="text/javascript" src="Graphics/Canvas.js"></script>
+    <script type="text/javascript" src="Renderer.js"></script>
+    <script type="text/javascript" src="Input/MouseInput.js"></script>
+    <script type="text/javascript" src="Application/Grid.js"></script>
+    <script>
+
+    var canvas = new Canvas('mainCanvas');
+    var renderer = new Renderer(canvas);
+    var mouse = new MouseInput(canvas.getRawCanvas());
+
+    var gridController = new GridController(mouse, renderer);
+    renderer.Start();
+
+    </script>
+</body>
+</html>
