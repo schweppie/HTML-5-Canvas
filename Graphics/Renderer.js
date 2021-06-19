@@ -14,6 +14,7 @@ class Renderer
         this.number = 0;
 
         this.onRenderHandlers = [];
+        this.onRenderTextHandlers = [];
 
         this.ClearScreen();
     }
@@ -23,11 +24,16 @@ class Renderer
         this.onRenderHandlers.push(handler);
     }
 
-    DispatchOnRenderHandlers()
+    AddOnRenderTextHandler(handler)
     {
-        for (let i = 0; i < this.onRenderHandlers.length; i++)
+        this.onRenderTextHandlers.push(handler);
+    }
+
+    DispatchOnRenderHandlers(handlers)
+    {
+        for (let i = 0; i < handlers.length; i++)
         {
-            this.onRenderHandlers[i](this.canvas);
+            handlers[i](this.canvas);
         }
     }
 
@@ -35,9 +41,11 @@ class Renderer
     {
         this.ClearScreen();
 
-        this.DispatchOnRenderHandlers();
+        this.DispatchOnRenderHandlers(this.onRenderHandlers);
 
         this.RenderScreen();
+
+        this.DispatchOnRenderHandlers(this.onRenderTextHandlers);
 
         window.requestAnimationFrame(this.Update.bind(this));
     }
@@ -46,8 +54,6 @@ class Renderer
     {
         window.requestAnimationFrame(this.Update.bind(this));
         this.ClearScreen();
-        //mouse.AddOnMoveHandler(this.Draw.bind(this));
-        //mouse.AddOnClickHandler(this.DrawVerticalLine.bind(this));
     }
 
     RenderScreen()

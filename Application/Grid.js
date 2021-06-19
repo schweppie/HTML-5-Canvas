@@ -8,7 +8,12 @@ class GridData
 
         this.gridData = new Array(width * height);
 
-        for(let i=0; i< width * height; i++)
+        this.Reset();
+    }
+
+    Reset()
+    {
+        for(let i=0; i< this.width * this.height; i++)
         {
             this.gridData[i] = false;
         }
@@ -98,6 +103,13 @@ class GridController
         mouseInput.AddOnDragHandler(this.OnDrag.bind(this));
         mouseInput.AddOnReleaseHandler(this.OnRelease.bind(this));
 
+        this.isReleased = true;
+        this.lastdrag = [-1,-1];
+    }
+
+    Reset()
+    {
+        this.gridData.Reset();
         this.isReleased = true;
         this.lastdrag = [-1,-1];
     }

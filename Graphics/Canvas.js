@@ -10,6 +10,11 @@ class Canvas
         this.height = this.canvas.height;
     }
 
+    getRawContext()
+    {
+        return this.ctx;
+    }
+
     getRawCanvas()
     {
         return this.canvas;

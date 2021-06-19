@@ -11,6 +11,8 @@
     <script type="text/javascript" src="Graphics/Renderer.js"></script>
     <script type="text/javascript" src="Input/MouseInput.js"></script>
     <script type="text/javascript" src="Application/Grid.js"></script>
+    <script type="text/javascript" src="UI/Button.js"></script>
+    <script type="text/javascript" src="UI/UiController.js"></script>
     <script>
 
     var canvas = new Canvas('mainCanvas');
@@ -18,6 +20,10 @@
     var mouse = new MouseInput(canvas.getRawCanvas());
 
     var gridController = new GridController(mouse, renderer);
+    var uiController = new UiController(mouse, renderer);
+
+    uiController.AddButton(100,100,"Clear Grid", gridController.Reset.bind(gridController));
+
     renderer.Start();
 
     </script>
