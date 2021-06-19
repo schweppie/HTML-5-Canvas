@@ -47,7 +47,7 @@ class GridVisualizer
         this.renderer = renderer;
         this.gridData = gridData;
         this.color = new RGB(50,50,225);
-        this.gridColor = new RGB(140,140,140);
+        this.gridColor = new RGB(40,40,40);
 
         renderer.AddOnRenderHandler(this.OnRender.bind(this))
     }
@@ -84,12 +84,21 @@ class GridController
 {
     constructor(mouseInput, renderer)
     {
-        this.gridData = new GridData(20,14,32);
+        var tileSize = 32;
+        var tilesx = Math.floor(window.innerWidth / tileSize);
+        var tilesy = Math.floor(window.innerHeight / tileSize);
+
+        console.log(tilesx);
+
+        this.gridData = new GridData(tilesx ,tilesy, tileSize);
         this.GridVisualizer = new GridVisualizer(renderer, this.gridData);
         this.mouseInput = mouseInput;
+
         mouseInput.AddOnClickHandler(this.OnClick.bind(this));
         mouseInput.AddOnDragHandler(this.OnDrag.bind(this));
+        mouseInput.AddOnReleaseHandler(this.OnRelease.bind(this));
 
+        this.isReleased = true;
         this.lastdrag = [-1,-1];
     }
 
@@ -115,7 +124,17 @@ class GridController
         var floorx = Math.floor(x / cellsize);
         var floory = Math.floor(y / cellsize);
 
+        if (this.isReleased == true)
+        {
+            this.toggle = !this.gridData.Get(floorx, floory);
+            this.isReleased = false;
+        }
 
-        this.gridData.Set(floorx, floory, !this.gridData.Get(floorx, floory));
+        this.gridData.Set(floorx, floory, this.toggle);
+    }
+
+    OnRelease(x, y)
+    {
+        this.isReleased = true;
     }
 }

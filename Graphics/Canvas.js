@@ -3,6 +3,8 @@ class Canvas
     constructor(canvasElementId)
     {
         this.canvas = document.getElementById(canvasElementId);
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
         this.ctx = this.canvas.getContext('2d');
         this.width = this.canvas.width;
         this.height = this.canvas.height;

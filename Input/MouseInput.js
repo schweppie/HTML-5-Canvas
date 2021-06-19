@@ -14,6 +14,7 @@ class MouseInput
         this.onMoveHandlers = [];
         this.onDragHandlers = [];
         this.onClickHandlers = [];
+        this.onReleaseHandlers = [];
     }
 
     AddOnMoveHandler(handler)
@@ -31,6 +32,11 @@ class MouseInput
         this.onClickHandlers.push(handler);
     }
 
+    AddOnReleaseHandler(handler)
+    {
+        this.onReleaseHandlers.push(handler);
+    }
+
     DispatchXYHandlers(x, y, handlers)
     {
         for (let i = 0; i < handlers.length; i++)
@@ -45,9 +51,10 @@ class MouseInput
         this.DispatchXYHandlers(e.offsetX, e.offsetY, this.onClickHandlers);
     }
 
-    Release()
+    Release(e)
     {
         this.pressed = false;
+        this.DispatchXYHandlers(e.offsetX, e.offsetY, this.onReleaseHandlers);
     }
 
     Move(e)

@@ -10,7 +10,7 @@ class Renderer
     constructor(canvas)
     {
         this.canvas = canvas;
-        this.clearColor = new RGB(50,30,30);
+        this.clearColor = new RGB(20,10,30);
         this.number = 0;
 
         this.onRenderHandlers = [];
