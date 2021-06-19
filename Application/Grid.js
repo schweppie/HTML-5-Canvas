@@ -19,6 +19,14 @@ class GridData
         }
     }
 
+    Fill()
+    {
+        for(let i=0; i< this.width * this.height; i++)
+        {
+            this.gridData[i] = true;
+        }
+    }
+
     Set(x, y, value)
     {
         this.gridData[(y * this.width) + x] = value;
@@ -110,6 +118,13 @@ class GridController
     Reset()
     {
         this.gridData.Reset();
+        this.isReleased = true;
+        this.lastdrag = [-1,-1];
+    }
+
+    Fill()
+    {
+        this.gridData.Fill();
         this.isReleased = true;
         this.lastdrag = [-1,-1];
     }

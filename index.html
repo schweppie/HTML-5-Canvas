@@ -23,6 +23,7 @@
     var uiController = new UiController(mouse, renderer);
 
     uiController.AddButton(100,100,"Clear Grid", gridController.Reset.bind(gridController));
+    uiController.AddButton(100,150,"Fill Grid", gridController.Fill.bind(gridController));
 
     renderer.Start();
 
