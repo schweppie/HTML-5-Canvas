@@ -11,6 +11,7 @@
     <script type="text/javascript" src="Graphics/Renderer.js"></script>
     <script type="text/javascript" src="Input/MouseInput.js"></script>
     <script type="text/javascript" src="Application/Grid.js"></script>
+    <script type="text/javascript" src="Application/Ball.js"></script>
     <script type="text/javascript" src="UI/Button.js"></script>
     <script type="text/javascript" src="UI/UiController.js"></script>
     <script>
@@ -21,9 +22,12 @@
 
     var gridController = new GridController(mouse, renderer);
     var uiController = new UiController(mouse, renderer);
+    var ballController = new BallController(renderer, gridController);
 
     uiController.AddButton(100,100,"Clear Grid", gridController.Reset.bind(gridController));
     uiController.AddButton(100,150,"Fill Grid", gridController.Fill.bind(gridController));
+    uiController.AddButton(100,200,"Spawn Ball", ballController.AddBall.bind(ballController));
+    uiController.AddButton(100,250,"Clear Balls", ballController.DestroyAllBalls.bind(ballController));
 
     renderer.Start();
 

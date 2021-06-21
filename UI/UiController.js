@@ -7,7 +7,7 @@ class UiController
         mouseInput.AddOnClickHandler(this.OnClick.bind(this));
         mouseInput.AddOnMoveHandler(this.OnMove.bind(this));
 
-        renderer.AddOnRenderHandler(this.OnRender.bind(this));
+        renderer.AddOnRenderUiHandler(this.OnRender.bind(this));
         renderer.AddOnRenderTextHandler(this.OnRenderText.bind(this));
     }
 

@@ -17,6 +17,8 @@ class Renderer
         this.number = 0;
 
         this.onRenderHandlers = [];
+
+        this.onRenderUiHandlers = [];
         this.onRenderTextHandlers = [];
 
         this.canvas.ReadImageData();
@@ -26,6 +28,11 @@ class Renderer
     AddOnRenderHandler(handler)
     {
         this.onRenderHandlers.push(handler);
+    }
+
+    AddOnRenderUiHandler(handler)
+    {
+        this.onRenderUiHandlers.push(handler);
     }
 
     AddOnRenderTextHandler(handler)
@@ -46,6 +53,7 @@ class Renderer
         this.FadeScreen();
 
         this.DispatchOnRenderHandlers(this.onRenderHandlers);
+        this.DispatchOnRenderHandlers(this.onRenderUiHandlers);
 
         this.RenderScreen();
 

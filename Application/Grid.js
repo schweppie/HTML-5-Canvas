@@ -15,7 +15,14 @@ class GridData
     {
         for(let i=0; i< this.width * this.height; i++)
         {
-            this.gridData[i] = false;
+            if ( i < this.width || i >= this.width * (this.height-1) && i < this.width * (this.height))
+            {
+                this.gridData[i] = true;
+            }
+            else
+            {
+                this.gridData[i] = false;
+            }
         }
     }
 
@@ -113,6 +120,14 @@ class GridController
 
         this.isReleased = true;
         this.lastdrag = [-1,-1];
+    }
+
+    IsOccupied(x, y)
+    {
+        var cellsize = this.gridData.getCellsize();
+        var floorx = Math.floor(x / cellsize);
+        var floory = Math.floor(y / cellsize);
+        return this.gridData.Get(floorx, floory);
     }
 
     Reset()
