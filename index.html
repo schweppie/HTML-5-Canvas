@@ -9,6 +9,7 @@
     <script type="text/javascript" src="Graphics/RGB.js"></script>
     <script type="text/javascript" src="Graphics/Canvas.js"></script>
     <script type="text/javascript" src="Graphics/Renderer.js"></script>
+    <script type="text/javascript" src="Graphics/Polygon.js"></script>
     <script type="text/javascript" src="Input/MouseInput.js"></script>
     <script type="text/javascript" src="Input/KeyInput.js"></script>
     <script type="text/javascript" src="Application/Grid.js"></script>
@@ -25,22 +26,33 @@
     var color = new RGB(255,255,255);
     var angle = 0.0;
 
-    function DrawLine()
+    var line = new Polygon([[-50,0],[50,0]]);
+    var box = new Polygon([[-10,-10],[10,-10],[10,10],[-10,10]]);
+    var shape = new Polygon([[0, 48], [24, 42], [42, 24], [-2, 2], [42, -24], [24, -42], [0, -48], [-24, -42], [-42, -24], [-48, 0], [-42, 24], [-24, 42]]);
+
+    line.Move(100,100);
+    box.Move(200,100);
+    shape.Move(250,200);
+
+    function HandleInput(keyCode)
     {
-        angle += 0.05;
 
-        var x0 = parseInt(-Math.sin(angle) * 150)+200;
-        var y0 = parseInt(Math.cos(angle) * 150)+200;
-
-        var x1 = parseInt(Math.sin(angle) * 150)+200;
-        var y1 = parseInt(-Math.cos(angle) * 150)+200;
-
-
-
-        canvas.DrawLine(x0,y0,x1,y1,color);
     }
 
-    renderer.AddOnRenderHandler(this.DrawLine.bind(this));
+    function DrawPolygons()
+    {
+        box.Draw(canvas);
+        box.Rotate(box.Angle() + 0.05);
+
+        line.Draw(canvas);
+        line.Rotate(line.Angle() + 0.02);
+
+        shape.Draw(canvas);
+        shape.Rotate(line.Angle() + 0.02);
+    }
+
+    keyboard.AddOnKeyDownHandler(this.HandleInput.bind(this));
+    renderer.AddOnRenderHandler(this.DrawPolygons.bind(this));
 
     renderer.Start();
 

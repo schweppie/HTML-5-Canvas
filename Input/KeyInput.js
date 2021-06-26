@@ -9,31 +9,33 @@ class KeyInput
         this.onUpHandlers = [];
     }
 
-    AddOnKeyDown(handler)
+    AddOnKeyDownHandler(handler)
     {
         this.onDownHandlers.push(handler);
     }
 
-    AddOnKeyUp(handler)
+    AddOnKeyDownHandler(handler)
     {
         this.onUpHandlers.push(handler);
     }
 
-    DispatchHandlers(handlers)
+    DispatchHandlers(handlers, event)
     {
+        console.log(event.keyCode);
         for (let i = 0; i < handlers.length; i++)
         {
-            handlers[i]();
+            handlers[i](event.keyCode);
         }
     }
 
     OnKeyDown(event)
     {
-        this.DispatchHandlers(this.onDownHandlers);
+
+        this.DispatchHandlers(this.onDownHandlers, event);
     }
 
     OnKeyUp(event)
     {
-        this.DispatchHandlers(this.onUpHandlers);
+        this.DispatchHandlers(this.onUpHandlers, event);
     }
 }
