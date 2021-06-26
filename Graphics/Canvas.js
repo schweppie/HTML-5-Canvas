@@ -88,6 +88,45 @@ class Canvas
         }
     }
 
+    DrawLine(x0, y0, x1, y1, color)
+    {
+        if (x0 == x1 && y0 == y1)
+        {
+            this.DrawPixel(x0, y0, color);
+            return;
+        }
+
+        var dx = x1 - x0;
+        var sx = (dx < 0) ? -1 : 1;
+        var dy = y1 - y0;
+        var sy = (dy < 0) ? -1 : 1;
+
+        if (Math.abs(dy) < Math.abs(dx))
+        {
+            var slope = dy / dx;
+            var pitch = y0 - slope * x0;
+            while (x0 != x1)
+            {
+                this.DrawPixel(x0, parseInt(Math.round(slope * x0 + pitch)), color);
+                x0 += sx;
+            }
+        }
+        else
+        {
+            console.log("2");
+            var slope = dx / dy;
+            var pitch = x0 - slope * y0;
+
+            while (y0 != y1)
+            {
+                this.DrawPixel(parseInt(Math.round(slope * y0 + pitch)), y0, color);
+                y0 += sy;
+            }
+        }
+
+        this.DrawPixel(x1, y1, color);
+    }
+
     DrawBox(x,y,tx,ty,color)
     {
         for(let i = y; i < ty; i++ )

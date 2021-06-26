@@ -10,6 +10,7 @@
     <script type="text/javascript" src="Graphics/Canvas.js"></script>
     <script type="text/javascript" src="Graphics/Renderer.js"></script>
     <script type="text/javascript" src="Input/MouseInput.js"></script>
+    <script type="text/javascript" src="Input/KeyInput.js"></script>
     <script type="text/javascript" src="Application/Grid.js"></script>
     <script type="text/javascript" src="Application/Ball.js"></script>
     <script type="text/javascript" src="UI/Button.js"></script>
@@ -19,15 +20,27 @@
     var canvas = new Canvas('mainCanvas');
     var renderer = new Renderer(canvas);
     var mouse = new MouseInput(canvas.getRawCanvas());
+    var keyboard = new KeyInput(canvas.getRawCanvas());
 
-    var gridController = new GridController(mouse, renderer);
-    var uiController = new UiController(mouse, renderer);
-    var ballController = new BallController(renderer, gridController);
+    var color = new RGB(255,255,255);
+    var angle = 0.0;
 
-    uiController.AddButton(100,100,"Clear Grid", gridController.Reset.bind(gridController));
-    uiController.AddButton(100,150,"Fill Grid", gridController.Fill.bind(gridController));
-    uiController.AddButton(100,200,"Spawn Ball", ballController.AddBall.bind(ballController));
-    uiController.AddButton(100,250,"Clear Balls", ballController.DestroyAllBalls.bind(ballController));
+    function DrawLine()
+    {
+        angle += 0.05;
+
+        var x0 = parseInt(-Math.sin(angle) * 150)+200;
+        var y0 = parseInt(Math.cos(angle) * 150)+200;
+
+        var x1 = parseInt(Math.sin(angle) * 150)+200;
+        var y1 = parseInt(-Math.cos(angle) * 150)+200;
+
+
+
+        canvas.DrawLine(x0,y0,x1,y1,color);
+    }
+
+    renderer.AddOnRenderHandler(this.DrawLine.bind(this));
 
     renderer.Start();
 

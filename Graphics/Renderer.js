@@ -50,7 +50,7 @@ class Renderer
 
     Update()
     {
-        this.FadeScreen();
+        this.ClearScreen();
 
         this.DispatchOnRenderHandlers(this.onRenderHandlers);
         this.DispatchOnRenderHandlers(this.onRenderUiHandlers);
