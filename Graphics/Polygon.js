@@ -7,6 +7,7 @@ class Polygon
         this.angle = 0.0;
         this.worldpoints = this.shape.slice();
         this.color = new RGB(255,255,255);
+        this.originColor = new RGB(255,0,0);
     }
 
     Position()
@@ -64,5 +65,8 @@ class Polygon
         }
 
         canvas.DrawLine(points[0][0], points[0][1],points[points.length-1][0], points[points.length-1][1], this.color);
+
+        canvas.DrawLine(this.position[0]-2, this.position[1],this.position[0]+2, this.position[1],this.originColor);
+        canvas.DrawLine(this.position[0], this.position[1]-2,this.position[0], this.position[1]+2,this.originColor);
     }
 }
