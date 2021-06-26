@@ -2,7 +2,6 @@ class KeyInput
 {
     constructor(canvas)
     {
-        console.log(canvas);
         document.addEventListener('keydown', this.OnKeyDown.bind(this));
         document.addEventListener('keyup', this.OnKeyUp.bind(this));
 
