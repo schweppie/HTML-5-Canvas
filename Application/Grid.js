@@ -17,7 +17,7 @@ class GridData
         {
             if ( i < this.width || i >= this.width * (this.height-1) && i < this.width * (this.height))
             {
-                this.gridData[i] = true;
+                this.gridData[i] = false;
             }
             else
             {

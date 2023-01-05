@@ -26,44 +26,26 @@
     var keyboard = new KeyInput(canvas.getRawCanvas());
 
     var color = new RGB(255,255,255);
-    var angle = 0.0;
 
-    var line = new Polygon([[-50,0],[50,0]]);
-    var box = new Polygon([[-10,-10],[10,-10],[10,10],[-10,10]]);
-    var shape = new Polygon([[0, 48], [24, 42], [42, 24], [-2, 2], [42, -24], [24, -42], [0, -48], [-24, -42], [-42, -24], [-48, 0], [-42, 24], [-24, 42]]);
+    var playerAngle = 0.0;
+    var playerPosition = [50,50];
     
-    var image = new ImageData(32,32);
-    image.CreateDebugNoise();
+    var playerVisual = new Polygon([[-5,-5],[5,-5],[5,5],[-5,5],[-5,-5]])
     
-    var sprite = new Sprite(image);
-
-    line.Move(100,100);
-    box.Move(200,100);
-    shape.Move(250,200);
-    sprite.Move(150, 150);
+    var gridController = new GridController(mouse, renderer);
 
     function HandleInput(keyCode)
     {
-        box.Move(box.position[0] + 1, 100);
     }
 
-    function DrawPolygons()
+    function DrawPlayer()
     {
-        box.Draw(canvas);
-        box.Rotate(box.Angle() + 0.05);
-
-        line.Draw(canvas);
-        line.Rotate(line.Angle() + 0.02);
-
-        shape.Draw(canvas);
-        shape.Rotate(line.Angle() + 0.02);
-        
-        sprite.Draw(canvas);
-        sprite.Rotate(sprite.Angle() + 0.002);
+        playerVisual.Move(playerPosition[0], playerPosition[1]);
+        playerVisual.Draw(canvas);
     }
 
     keyboard.AddOnKeyDownHandler(this.HandleInput.bind(this));
-    renderer.AddOnRenderHandler(this.DrawPolygons.bind(this));
+    renderer.AddOnRenderHandler(this.DrawPlayer.bind(this));
 
     renderer.Start();
     </script>

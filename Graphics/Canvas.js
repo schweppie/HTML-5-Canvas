@@ -3,10 +3,10 @@ class Canvas
     constructor(canvasElementId)
     {
         this.canvas = document.getElementById(canvasElementId);
-        this.canvas.width = window.innerWidth / 3;
-        this.canvas.height = window.innerHeight / 3;
+        this.canvas.width = window.innerWidth ;
+        this.canvas.height = window.innerHeight;
         this.ctx = this.canvas.getContext('2d');
-        this.ctx.scale(4,4);
+        this.ctx.scale(1,1);
         this.width = this.canvas.width;
         this.height = this.canvas.height;
     }
@@ -108,7 +108,7 @@ class Canvas
             var pitch = y0 - slope * x0;
             while (x0 != x1)
             {
-                this.DrawPixel(x0, parseInt(Math.round(slope * x0 + pitch)), color);
+                this.DrawPixel(x0, (Math.round(slope * x0 + pitch)), color);
                 x0 += sx;
             }
         }
@@ -119,7 +119,7 @@ class Canvas
 
             while (y0 != y1)
             {
-                this.DrawPixel(parseInt(Math.round(slope * y0 + pitch)), y0, color);
+                this.DrawPixel( (Math.round(slope * y0 + pitch)), y0, color);
                 y0 += sy;
             }
         }

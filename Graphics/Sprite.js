@@ -37,18 +37,16 @@
     {
         var position = [x,y];
         
-        
         for (let i = 0; i < this.width * this.height; i++)
         {
-            var localX = (i % this.width) - this.pivot[0];
-            var localY = (i / this.height)- this.pivot[1];
+            var localX = Math.floor((i % this.width)) - this.pivot[0];
+            var localY = Math.floor((i / this.height))- this.pivot[1];
 
             // Transform
-            var renderX = parseInt((localX * Math.cos(angle)) - (localY * Math.sin(angle)) + position[0]);
-            var renderY = parseInt((localX * Math.sin(angle)) + (localY * Math.cos(angle)) + position[1]);
+            var renderX = Math.floor((localX * Math.cos(angle)) - (localY * Math.sin(angle))) + position[0];
+            var renderY = Math.floor((localX * Math.sin(angle)) + (localY * Math.cos(angle))) + position[1];
             
             canvas.DrawPixel(renderX, renderY, this.data[i]);
-            
         }
 
         canvas.DrawLine(this.position[0]-2, this.position[1],this.position[0]+2, this.position[1],this.originColor);
