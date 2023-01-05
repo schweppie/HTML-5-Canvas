@@ -91,7 +91,7 @@ class Canvas
 
     DrawLine(x0, y0, x1, y1, color)
     {
-        if (x0 == x1 && y0 == y1)
+        if (x0 === x1 && y0 === y1)
         {
             this.DrawPixel(x0, y0, color);
             return;
@@ -106,7 +106,7 @@ class Canvas
         {
             var slope = dy / dx;
             var pitch = y0 - slope * x0;
-            while (x0 != x1)
+            while (x0 !== x1)
             {
                 this.DrawPixel(x0, (Math.round(slope * x0 + pitch)), color);
                 x0 += sx;
@@ -117,7 +117,7 @@ class Canvas
             var slope = dx / dy;
             var pitch = x0 - slope * y0;
 
-            while (y0 != y1)
+            while (y0 !== y1)
             {
                 this.DrawPixel( (Math.round(slope * y0 + pitch)), y0, color);
                 y0 += sy;

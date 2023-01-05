@@ -67,15 +67,12 @@ class GridVisualizer
 {
     constructor(renderer, gridData)
     {
-        this.renderer = renderer;
         this.gridData = gridData;
         this.color = new RGB(50,50,225);
         this.gridColor = new RGB(40,40,40);
-
-        renderer.AddOnRenderHandler(this.OnRender.bind(this))
     }
 
-    OnRender(canvas)
+    Draw(canvas)
     {
         var width = this.gridData.getWidth();
         var height = this.gridData.getHeight();
@@ -108,15 +105,14 @@ class GridController
     constructor(mouseInput, renderer)
     {
         var tileSize = 32;
-        /*
+        
         var tilesx = Math.floor(window.innerWidth / tileSize);
         var tilesy = Math.floor(window.innerHeight / tileSize);
-        */
-        
+
+        /*
         var tilesx = 16;
         var tilesy = 16;
-
-        console.log(tilesx);
+        */
 
         this.gridData = new GridData(tilesx ,tilesy, tileSize);
         this.GridVisualizer = new GridVisualizer(renderer, this.gridData);
@@ -128,6 +124,16 @@ class GridController
 
         this.isReleased = true;
         this.lastdrag = [-1,-1];
+    }
+    
+    Draw(canvas)
+    {
+        this.GridVisualizer.Draw(canvas);
+    }
+    
+    GetGridData()
+    {
+        return this.gridData;
     }
 
     IsOccupied(x, y)

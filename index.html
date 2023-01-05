@@ -30,33 +30,38 @@
     var mouse = new MouseInput(canvas.getRawCanvas());
     var keyboard = new KeyInput(canvas.getRawCanvas());
     
-    //var uiController = new UiController(mouse, renderer);
-
+    var uiController = new UiController(mouse, renderer);
+    let gridVisible = true;
+    let raysVisible = true;
+    
+    uiController.AddButton(10,50,"Toggle Grid", () => gridVisible = !gridVisible);
+    uiController.AddButton(10,100,"Toggle Rays", () => raysVisible = !raysVisible);
+    
     var color = new RGB(255,255,255);
     var colorRed = new RGB(255,0,0);
 
     var playerAngle = 0.0;
     var playerSpeed = 0.0;
-    var playerPosition = [50,50];
+    var playerPosition = [350,350];
     
     var playerVisual = new Polygon([[-5,-5],[5,-5],[5,5],[0,5], [0, 20], [0,5],[-5,5],[-5,-5]])
     var gridController = new GridController(mouse, renderer);
     
-    const viewport = new Viewport(600,50,320,240);
+    const viewport = new Viewport(240,50,320,240, gridController.gridData);
 
     function HandleInput(keyCode)
     {
         if (keyCode === 87)
-            playerSpeed += 30;
+            playerSpeed += 15;
 
         if (keyCode === 83)
-            playerSpeed -= 30;
+            playerSpeed -= 15;
 
         if (keyCode === 65)
-            playerAngle -= 4 * deltaTime;
+            playerAngle -= 2 * deltaTime;
 
         if (keyCode === 68)
-            playerAngle += 4 * deltaTime;
+            playerAngle += 2 * deltaTime;
 
         playerSpeed = Math.max(-300, Math.min(playerSpeed, 300));
     }
@@ -70,9 +75,19 @@
         var yTranslation = Math.cos(-playerAngle) * playerSpeed;
         yTranslation *= deltaTime;
         
-        if (!isNaN(xTranslation) && !isNaN(yTranslation)) {
+        if (!isNaN(xTranslation) && !isNaN(yTranslation))
+        {
+            const cellsize = gridController.gridData.cellsize;
+            let xtile = 0;
+            let ytile = 0;
+            
             playerPosition[0] += xTranslation;
             playerPosition[1] += yTranslation;
+
+            xtile = Math.round((playerPosition[0] / cellsize)) * cellsize;
+            ytile = Math.round((playerPosition[1] / cellsize)) * cellsize;
+
+            //canvas.DrawBox(xtile, ytile, xtile + cellsize, ytile + cellsize, new RGB(255,128,0));
         }
         
         playerVisual.Move(playerPosition[0], playerPosition[1]);
@@ -82,7 +97,10 @@
     
     function DrawViewport()
     {
-        viewport.Draw(canvas);
+        if (gridVisible)
+            gridController.Draw(canvas);
+        
+        viewport.Draw(canvas, playerPosition, playerAngle, raysVisible);
     }
     
     function DrawUi()
