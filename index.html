@@ -19,11 +19,17 @@
     <script type="text/javascript" src="UI/Button.js"></script>
     <script type="text/javascript" src="UI/UiController.js"></script>
     <script>
+        
+    const date = new Date();
+    var lastFrameTime;
+    var deltaTime;
 
     var canvas = new Canvas('mainCanvas');
     var renderer = new Renderer(canvas);
     var mouse = new MouseInput(canvas.getRawCanvas());
     var keyboard = new KeyInput(canvas.getRawCanvas());
+    
+    //var uiController = new UiController(mouse, renderer);
 
     var color = new RGB(255,255,255);
     var colorRed = new RGB(255,0,0);
@@ -40,38 +46,58 @@
     {
         if (keyCode === 87)
         {
-            playerSpeed += 0.04;
+            playerSpeed += 30;
         }
 
         if (keyCode === 83)
         {
-            playerSpeed -= 0.04;
+            playerSpeed -= 30;
         }
 
         if (keyCode === 65)
-            playerAngle -= 0.02;
+            playerAngle -= 4 * deltaTime;
 
         if (keyCode === 68)
-            playerAngle += 0.02;
+            playerAngle += 4 * deltaTime;
 
-        playerSpeed = Math.max(-5, Math.min(playerSpeed, 5));
+        playerSpeed = Math.max(-300, Math.min(playerSpeed, 300));
     }
 
     function DrawPlayer()
     {
         playerSpeed *= 0.98;
         
-        playerPosition[0] += Math.sin(-playerAngle) * playerSpeed;
-        playerPosition[1] += Math.cos(-playerAngle) * playerSpeed;
+        var xTranslation = Math.sin(-playerAngle) * playerSpeed;
+        xTranslation *= deltaTime;
+        var yTranslation = Math.cos(-playerAngle) * playerSpeed;
+        yTranslation *= deltaTime;
         
+        if (!isNaN(xTranslation) && !isNaN(yTranslation)) {
+            playerPosition[0] += xTranslation;
+            playerPosition[1] += yTranslation;
+        }
         
         playerVisual.Move(playerPosition[0], playerPosition[1]);
         playerVisual.Draw(canvas);
         playerVisual.Rotate(playerAngle);
     }
+    
+    function DrawUi()
+    {
+        var ms = (Date.now() - lastFrameTime);
+        deltaTime = ms * 0.001;
+        
+        var ctx = canvas.getRawContext();
+        ctx.font = "25px Consolas";
+        ctx.fillStyle = "#00ff00";
+        ctx.fillText("FPS: " + Math.round(1000 / ms) + " DeltaTime: " + deltaTime, 15, 30);
+
+        lastFrameTime = Date.now();
+    }
 
     keyboard.AddOnKeyPressedHandler(this.HandleInput.bind(this));
     renderer.AddOnRenderHandler(this.DrawPlayer.bind(this));
+    renderer.AddOnRenderTextHandler(this.DrawUi.bind(this));
 
     renderer.Start();
     </script>
