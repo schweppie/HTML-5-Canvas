@@ -26,25 +26,51 @@
     var keyboard = new KeyInput(canvas.getRawCanvas());
 
     var color = new RGB(255,255,255);
+    var colorRed = new RGB(255,0,0);
 
     var playerAngle = 0.0;
+    var playerSpeed = 0.0;
     var playerPosition = [50,50];
     
-    var playerVisual = new Polygon([[-5,-5],[5,-5],[5,5],[-5,5],[-5,-5]])
+    var playerVisual = new Polygon([[-5,-5],[5,-5],[5,5],[0,5], [0, 20], [0,5],[-5,5],[-5,-5]])
     
     var gridController = new GridController(mouse, renderer);
 
     function HandleInput(keyCode)
     {
+        if (keyCode === 87)
+        {
+            playerSpeed += 0.04;
+        }
+
+        if (keyCode === 83)
+        {
+            playerSpeed -= 0.04;
+        }
+
+        if (keyCode === 65)
+            playerAngle -= 0.02;
+
+        if (keyCode === 68)
+            playerAngle += 0.02;
+
+        playerSpeed = Math.max(-5, Math.min(playerSpeed, 5));
     }
 
     function DrawPlayer()
     {
+        playerSpeed *= 0.98;
+        
+        playerPosition[0] += Math.sin(-playerAngle) * playerSpeed;
+        playerPosition[1] += Math.cos(-playerAngle) * playerSpeed;
+        
+        
         playerVisual.Move(playerPosition[0], playerPosition[1]);
         playerVisual.Draw(canvas);
+        playerVisual.Rotate(playerAngle);
     }
 
-    keyboard.AddOnKeyDownHandler(this.HandleInput.bind(this));
+    keyboard.AddOnKeyPressedHandler(this.HandleInput.bind(this));
     renderer.AddOnRenderHandler(this.DrawPlayer.bind(this));
 
     renderer.Start();

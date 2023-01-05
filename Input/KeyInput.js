@@ -5,10 +5,30 @@ class KeyInput
         document.addEventListener('keydown', this.OnKeyDown.bind(this));
         document.addEventListener('keyup', this.OnKeyUp.bind(this));
 
+        window.requestAnimationFrame(this.HandleKeyboard.bind(this));
+        
         this.onDownHandlers = [];
         this.onUpHandlers = [];
+        this.onPressedHandlers = [];
+        
+        this.pressedKeys = [];       
+    }
+    
+    HandleKeyboard()
+    {
+        for (let i = 0; i < this.pressedKeys.length; i++)
+        {
+            this.DispatchHandlers(this.onPressedHandlers, this.pressedKeys[i]);        
+        }
+        
+        window.requestAnimationFrame(this.HandleKeyboard.bind(this));
     }
 
+    AddOnKeyPressedHandler(handler)
+    {
+        this.onPressedHandlers.push(handler);
+    }
+    
     AddOnKeyDownHandler(handler)
     {
         this.onDownHandlers.push(handler);
@@ -19,23 +39,30 @@ class KeyInput
         this.onUpHandlers.push(handler);
     }
 
-    DispatchHandlers(handlers, event)
+    DispatchHandlers(handlers, keycode)
     {
-        console.log(event.keyCode);
         for (let i = 0; i < handlers.length; i++)
         {
-            handlers[i](event.keyCode);
+            handlers[i](keycode);
         }
     }
 
     OnKeyDown(event)
     {
-
-        this.DispatchHandlers(this.onDownHandlers, event);
+        this.DispatchHandlers(this.onDownHandlers, event.keyCode);
+        
+        if (!this.pressedKeys.includes(event.keyCode))
+            this.pressedKeys.push(event.keyCode);
     }
 
     OnKeyUp(event)
     {
-        this.DispatchHandlers(this.onUpHandlers, event);
+        if (this.pressedKeys.includes(event.keyCode))
+        {
+            let index = this.pressedKeys.indexOf(event.keyCode);
+            this.pressedKeys.splice(index, 1);
+        }
+        
+        this.DispatchHandlers(this.onUpHandlers, event.keyCode);
     }
 }
