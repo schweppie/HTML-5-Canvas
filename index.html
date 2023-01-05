@@ -12,6 +12,7 @@
     <script type="text/javascript" src="Graphics/Polygon.js"></script>
     <script type="text/javascript" src="Graphics/ImageData.js"></script>
     <script type="text/javascript" src="Graphics/Sprite.js"></script>
+    <script type="text/javascript" src="Graphics/Viewport.js"></script>
     <script type="text/javascript" src="Input/MouseInput.js"></script>
     <script type="text/javascript" src="Input/KeyInput.js"></script>
     <script type="text/javascript" src="Application/Grid.js"></script>
@@ -39,20 +40,17 @@
     var playerPosition = [50,50];
     
     var playerVisual = new Polygon([[-5,-5],[5,-5],[5,5],[0,5], [0, 20], [0,5],[-5,5],[-5,-5]])
-    
     var gridController = new GridController(mouse, renderer);
+    
+    const viewport = new Viewport(600,50,320,240);
 
     function HandleInput(keyCode)
     {
         if (keyCode === 87)
-        {
             playerSpeed += 30;
-        }
 
         if (keyCode === 83)
-        {
             playerSpeed -= 30;
-        }
 
         if (keyCode === 65)
             playerAngle -= 4 * deltaTime;
@@ -82,6 +80,11 @@
         playerVisual.Rotate(playerAngle);
     }
     
+    function DrawViewport()
+    {
+        viewport.Draw(canvas);
+    }
+    
     function DrawUi()
     {
         var ms = (Date.now() - lastFrameTime);
@@ -97,6 +100,7 @@
 
     keyboard.AddOnKeyPressedHandler(this.HandleInput.bind(this));
     renderer.AddOnRenderHandler(this.DrawPlayer.bind(this));
+    renderer.AddOnRenderHandler(this.DrawViewport.bind(this));
     renderer.AddOnRenderTextHandler(this.DrawUi.bind(this));
 
     renderer.Start();

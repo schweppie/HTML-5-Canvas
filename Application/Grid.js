@@ -17,12 +17,15 @@ class GridData
         {
             if ( i < this.width || i >= this.width * (this.height-1) && i < this.width * (this.height))
             {
-                this.gridData[i] = false;
+
+                this.gridData[i] = true;
             }
             else
             {
                 this.gridData[i] = false;
             }
+            if ((i % this.width) == 0)
+                this.gridData[i] = true;
         }
     }
 
@@ -105,8 +108,13 @@ class GridController
     constructor(mouseInput, renderer)
     {
         var tileSize = 32;
+        /*
         var tilesx = Math.floor(window.innerWidth / tileSize);
         var tilesy = Math.floor(window.innerHeight / tileSize);
+        */
+        
+        var tilesx = 16;
+        var tilesy = 16;
 
         console.log(tilesx);
 
