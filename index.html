@@ -12,6 +12,7 @@
     <script type="text/javascript" src="Graphics/Polygon.js"></script>
     <script type="text/javascript" src="Graphics/ImageData.js"></script>
     <script type="text/javascript" src="Graphics/Sprite.js"></script>
+    <script type="text/javascript" src="Graphics/Viewport.js"></script>
     <script type="text/javascript" src="Input/MouseInput.js"></script>
     <script type="text/javascript" src="Input/KeyInput.js"></script>
     <script type="text/javascript" src="Application/Grid.js"></script>
@@ -19,51 +20,106 @@
     <script type="text/javascript" src="UI/Button.js"></script>
     <script type="text/javascript" src="UI/UiController.js"></script>
     <script>
+        
+    const date = new Date();
+    var lastFrameTime;
+    var deltaTime;
 
     var canvas = new Canvas('mainCanvas');
     var renderer = new Renderer(canvas);
     var mouse = new MouseInput(canvas.getRawCanvas());
     var keyboard = new KeyInput(canvas.getRawCanvas());
-
+    
+    var uiController = new UiController(mouse, renderer);
+    let gridVisible = true;
+    let raysVisible = true;
+    
+    uiController.AddButton(10,50,"Toggle Grid", () => gridVisible = !gridVisible);
+    uiController.AddButton(10,100,"Toggle Rays", () => raysVisible = !raysVisible);
+    
     var color = new RGB(255,255,255);
-    var angle = 0.0;
+    var colorRed = new RGB(255,0,0);
 
-    var line = new Polygon([[-50,0],[50,0]]);
-    var box = new Polygon([[-10,-10],[10,-10],[10,10],[-10,10]]);
-    var shape = new Polygon([[0, 48], [24, 42], [42, 24], [-2, 2], [42, -24], [24, -42], [0, -48], [-24, -42], [-42, -24], [-48, 0], [-42, 24], [-24, 42]]);
+    var playerAngle = 0.0;
+    var playerSpeed = 0.0;
+    var playerPosition = [350,350];
     
-    var image = new ImageData(32,32);
-    image.CreateDebugNoise();
+    var playerVisual = new Polygon([[-5,-5],[5,-5],[5,5],[0,5], [0, 20], [0,5],[-5,5],[-5,-5]])
+    var gridController = new GridController(mouse, renderer);
     
-    var sprite = new Sprite(image);
-
-    line.Move(100,100);
-    box.Move(200,100);
-    shape.Move(250,200);
-    sprite.Move(150, 150);
+    const viewport = new Viewport(240,50,320,240, gridController.gridData);
 
     function HandleInput(keyCode)
     {
-        box.Move(box.position[0] + 1, 100);
+        if (keyCode === 87)
+            playerSpeed += 15;
+
+        if (keyCode === 83)
+            playerSpeed -= 15;
+
+        if (keyCode === 65)
+            playerAngle -= 2 * deltaTime;
+
+        if (keyCode === 68)
+            playerAngle += 2 * deltaTime;
+
+        playerSpeed = Math.max(-300, Math.min(playerSpeed, 300));
     }
 
-    function DrawPolygons()
+    function DrawPlayer()
     {
-        box.Draw(canvas);
-        box.Rotate(box.Angle() + 0.05);
-
-        line.Draw(canvas);
-        line.Rotate(line.Angle() + 0.02);
-
-        shape.Draw(canvas);
-        shape.Rotate(line.Angle() + 0.02);
+        playerSpeed *= 0.98;
         
-        sprite.Draw(canvas);
-        sprite.Rotate(sprite.Angle() + 0.002);
+        var xTranslation = Math.sin(-playerAngle) * playerSpeed;
+        xTranslation *= deltaTime;
+        var yTranslation = Math.cos(-playerAngle) * playerSpeed;
+        yTranslation *= deltaTime;
+        
+        if (!isNaN(xTranslation) && !isNaN(yTranslation))
+        {
+            const cellsize = gridController.gridData.cellsize;
+            let xtile = 0;
+            let ytile = 0;
+            
+            playerPosition[0] += xTranslation;
+            playerPosition[1] += yTranslation;
+
+            xtile = Math.round((playerPosition[0] / cellsize)) * cellsize;
+            ytile = Math.round((playerPosition[1] / cellsize)) * cellsize;
+
+            //canvas.DrawBox(xtile, ytile, xtile + cellsize, ytile + cellsize, new RGB(255,128,0));
+        }
+        
+        playerVisual.Move(playerPosition[0], playerPosition[1]);
+        playerVisual.Draw(canvas);
+        playerVisual.Rotate(playerAngle);
+    }
+    
+    function DrawViewport()
+    {
+        if (gridVisible)
+            gridController.Draw(canvas);
+        
+        viewport.Draw(canvas, playerPosition, playerAngle, raysVisible);
+    }
+    
+    function DrawUi()
+    {
+        var ms = (Date.now() - lastFrameTime);
+        deltaTime = ms * 0.001;
+        
+        var ctx = canvas.getRawContext();
+        ctx.font = "25px Consolas";
+        ctx.fillStyle = "#00ff00";
+        ctx.fillText("FPS: " + Math.round(1000 / ms) + " DeltaTime: " + deltaTime, 15, 30);
+
+        lastFrameTime = Date.now();
     }
 
-    keyboard.AddOnKeyDownHandler(this.HandleInput.bind(this));
-    renderer.AddOnRenderHandler(this.DrawPolygons.bind(this));
+    keyboard.AddOnKeyPressedHandler(this.HandleInput.bind(this));
+    renderer.AddOnRenderHandler(this.DrawPlayer.bind(this));
+    renderer.AddOnRenderHandler(this.DrawViewport.bind(this));
+    renderer.AddOnRenderTextHandler(this.DrawUi.bind(this));
 
     renderer.Start();
     </script>
